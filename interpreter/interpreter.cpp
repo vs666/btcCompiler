@@ -561,8 +561,181 @@ public:
 					execution_stack.push(e5);
 					break;
 				}
+			case OP_1ADD:
+				{
+					int32_t elt = execution_stack.top() + 1;
+					execution_stack.pop();
+					execution_stack.push(elt);
+					break;
+				}
+			case OP_1SUB:
+				{
+					int32_t elt = execution_stack.top() - 1;
+					execution_stack.pop();
+					execution_stack.push(elt);
+					break;
+				}
+			case OP_NEGATE:
+				{
+					int32_t elt = -execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push(elt);
+					break;
+				}
+			case OP_ABS:
+				{
+					int32_t elt = execution_stack.top();
+					elt = elt<0?-elt:elt;
+					execution_stack.pop();
+					execution_stack.push(elt);
+					break;
+				}
+			case OP_NOT:
+				{
+					int32_t elt = execution_stack.top();
+					elt = (int32_t)(elt==0?1:0);
+					execution_stack.pop();
+					execution_stack.push(elt);
+					break;
+				}
+			case OP_0NOTEQUAL:
+				{
+					int32_t elt = execution_stack.top()==0?0:1;
+					execution_stack.pop();
+					execution_stack.push(elt);
+				}
+			case OP_ADD:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push(e1 + e2);
+					break;
+				}
+			case OP_SUB:		// todo: check the ordering 
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push(e2 - e1);	
+					break;
+				}
+			case OP_BOOLAND:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((((e1==0)||(e2==0))?0:1));
+					break;
+				}
+			case OP_BOOLOR:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((((e1!=0)||(e2!=0))?1:0));
+					break;
+				}
+			case OP_NUMEQUAL:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1==e2)?1:0);
+					break;
+				}
+			case OP_NUMEQUALVERIFY:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1==e2)?1:0);
+					if(e1 != e2){
+						return 0;
+					}
+					break;
+				}
+			case OP_NUMNOTEQUAL:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1==e2)?0:1);
+					break;
+				}
+			case OP_LESSTHAN:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1>e2)?1:0);
+					break;
+				}
+			case OP_GREATERTHAN:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1<e2)?1:0);
+					break;
+				}
+			case OP_LESSTHANOREQUAL:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1>=e2)?1:0);
+					break;
+				}
+			case OP_GREATERTHANOREQUAL:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1<=e2)?1:0);
+					break;
+				}
+			case OP_MIN:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1<e2)?e1:e2);
+					break;
+				}
+			case OP_MAX:
+				{
+					int32_t e1 = execution_stack.top();
+					execution_stack.pop();
+					int32_t e2 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e1<e2)?e2:e1);
+					break;
+				}
+			case OP_WITHIN:
+				{
+					int32_t max_elt = execution_stack.top();
+					execution_stack.pop();
+					int32_t min_elt = execution_stack.top();
+					execution_stack.pop();
+					int32_t e3 = execution_stack.top();
+					execution_stack.pop();
+					execution_stack.push((e3>=min_elt && e3 < max_elt)?1:0);
+					break;
+				}
 			case OP_NOP1:
-				std::cout << "here" << std::endl;
 				if(TESTING){
 					this->printStack(execution_stack,alt_stack);
 				}
